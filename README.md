@@ -133,7 +133,7 @@ OPENROUTER_API_KEY = "your_api_key_here"
 
 ⚙️ التثبيت
 1. استنساخ المستودع
-git clone https://
+git clone git@github.com:Mohanned-Amer/PDF-Summrizer-Ai-Agent.git
 
 
 ثم انتقل إلى مجلد المشروع:
