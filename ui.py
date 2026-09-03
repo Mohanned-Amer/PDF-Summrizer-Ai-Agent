@@ -3,7 +3,6 @@ import lang_helper
 
 from style import load_styles
 
-
 # =========================================================
 # Page Configuration
 # =========================================================
@@ -11,13 +10,13 @@ from style import load_styles
 def setup_page():
 
     st.set_page_config(
-        page_title="PDF Summrizer AI Agent",
-        page_icon="📚",
-        layout="centered"
+        page_title="PDF Summarizer AI",
+        page_icon="📄",
+        layout="centered",
+        initial_sidebar_state="expanded"
     )
 
     load_styles()
-
 
 # =========================================================
 # Header
@@ -30,12 +29,41 @@ def show_header():
         ""
     )
 
-    st.title("📚 PDF Summrizer AI Agent")
-
     st.markdown(
-        f"### Welcome, {username} 👋"
+        """
+        <div class="app-header">
+            <div class="header-icon">📄</div>
+            <div class="header-content">
+                <div class="header-title">
+                    PDF Summarizer AI
+                </div>
+                <div class="header-subtitle">
+                    Read • Summarize • Learn
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
+    if username:
+
+        st.markdown(
+            f"""
+            <div class="welcome-card">
+                <div class="welcome-icon">👋</div>
+                <div>
+                    <div class="welcome-title">
+                        Welcome back, {username}
+                    </div>
+                    <div class="welcome-text">
+                        Upload your PDF and let AI help you understand it.
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 # =========================================================
 # Footer
@@ -46,12 +74,17 @@ def show_footer():
     st.markdown(
         """
         <div class="footer">
-           Devloper : Eng Mohanned Amer
+            <div class="footer-line"></div>
+            <div class="footer-text">
+                PDF Summarizer AI
+            </div>
+            <div class="footer-author">
+                Developed by Eng Mohanned Amer
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
-
 
 # =========================================================
 # Sidebar
@@ -61,8 +94,16 @@ def show_sidebar():
 
     st.sidebar.markdown(
         """
-        <div class="sidebar-title">
-            📚 PDF Summrizer AI Agent
+        <div class="sidebar-brand">
+            <div class="sidebar-logo">📄</div>
+            <div>
+                <div class="sidebar-brand-title">
+                    PDF Summarizer
+                </div>
+                <div class="sidebar-brand-subtitle">
+                    AI Learning Assistant
+                </div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
@@ -78,17 +119,34 @@ def show_sidebar():
     )
 
     st.sidebar.markdown(
-        f"👤 **{username}**"
+        f"""
+        <div class="user-card">
+            <div class="user-avatar">👤</div>
+            <div>
+                <div class="user-label">Signed in as</div>
+                <div class="user-name">{username}</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
-    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        '<div class="sidebar-divider"></div>',
+        unsafe_allow_html=True
+    )
 
     # =====================================================
     # Response Language
     # =====================================================
 
     st.sidebar.markdown(
-        "### 🌐 Response Language"
+        """
+        <div class="sidebar-section-title">
+            🌐 Response Language
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     response_language = st.sidebar.selectbox(
@@ -101,25 +159,36 @@ def show_sidebar():
         label_visibility="collapsed"
     )
 
-    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        '<div class="sidebar-divider"></div>',
+        unsafe_allow_html=True
+    )
 
     # =====================================================
     # New Conversation
     # =====================================================
 
     new_conversation = st.sidebar.button(
-        "➕ New Conversation",
+        "＋  New Conversation",
         use_container_width=True
     )
 
-    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        '<div class="sidebar-divider"></div>',
+        unsafe_allow_html=True
+    )
 
     # =====================================================
     # Past Conversations
     # =====================================================
 
     st.sidebar.markdown(
-        "### 💬 Past Conversations"
+        """
+        <div class="sidebar-section-title">
+            💬 Recent Conversations
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     user_id = st.session_state.get(
@@ -132,8 +201,19 @@ def show_sidebar():
 
     if not conversations:
 
-        st.sidebar.info(
-            "No past conversations yet."
+        st.sidebar.markdown(
+            """
+            <div class="empty-conversations">
+                <div class="empty-icon">💭</div>
+                <div class="empty-title">
+                    No conversations yet
+                </div>
+                <div class="empty-text">
+                    Start asking questions about your PDF.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
     else:
@@ -148,7 +228,7 @@ def show_sidebar():
             )
 
             if st.sidebar.button(
-                title,
+                f"💬  {title}",
                 key=f"conversation_{conversation_id}",
                 use_container_width=True
             ):
@@ -174,10 +254,13 @@ def show_sidebar():
     # Logout
     # =====================================================
 
-    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        '<div class="sidebar-bottom-divider"></div>',
+        unsafe_allow_html=True
+    )
 
     logout = st.sidebar.button(
-        "🚪 Logout",
+        "↪  Logout",
         use_container_width=True
     )
 
@@ -187,7 +270,6 @@ def show_sidebar():
         logout
     )
 
-
 # =========================================================
 # PDF Upload Section
 # =========================================================
@@ -195,7 +277,20 @@ def show_sidebar():
 def show_pdf_section(response_language):
 
     st.markdown(
-        "## 📄 Study Material"
+        """
+        <div class="section-heading">
+            <div class="section-icon">📄</div>
+            <div>
+                <div class="section-title">
+                    Study Material
+                </div>
+                <div class="section-description">
+                    Upload a PDF and turn it into useful study content.
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     uploaded_file = st.file_uploader(
@@ -205,10 +300,40 @@ def show_pdf_section(response_language):
     )
 
     if not uploaded_file:
+
+        st.markdown(
+            """
+            <div class="upload-hint">
+                <span>📎</span>
+                <span>
+                    Supported format: PDF
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         return None
 
-    st.success(
-        f"📄 {uploaded_file.name} uploaded successfully."
+    # =====================================================
+    # Uploaded File Card
+    # =====================================================
+
+    st.markdown(
+        f"""
+        <div class="file-card">
+            <div class="file-icon">📕</div>
+            <div class="file-details">
+                <div class="file-name">
+                    {uploaded_file.name}
+                </div>
+                <div class="file-status">
+                    ✓ PDF ready to process
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     # =====================================================
@@ -216,12 +341,12 @@ def show_pdf_section(response_language):
     # =====================================================
 
     if st.button(
-        "📖 Read PDF",
+        "📖  Read PDF",
         use_container_width=True
     ):
 
         with st.spinner(
-            "📖 Reading PDF..."
+            "Reading your PDF..."
         ):
 
             pdf_text = lang_helper.extract_pdf_text(
@@ -231,6 +356,7 @@ def show_pdf_section(response_language):
         if pdf_text:
 
             st.session_state.pdf_text = pdf_text
+
             st.session_state.pdf_name = (
                 uploaded_file.name
             )
@@ -254,25 +380,54 @@ def show_pdf_section(response_language):
     )
 
     if not pdf_text:
+
         return None
 
-    st.markdown("---")
+    # =====================================================
+    # Actions
+    # =====================================================
 
     st.markdown(
-        "### 🧠 What would you like to do?"
+        """
+        <div class="action-heading">
+            <div class="action-heading-icon">✨</div>
+            <div>
+                <div class="action-title">
+                    What would you like to do?
+                </div>
+                <div class="action-description">
+                    Choose an AI tool for your study material.
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     # =====================================================
     # Summary
     # =====================================================
 
+    st.markdown(
+        """
+        <div class="tool-label">
+            🧠 Summarize
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.caption(
+        "Create a clear and useful summary from your PDF."
+    )
+
     if st.button(
-        "🧠 Summarize PDF",
+        "Create PDF Summary",
         use_container_width=True
     ):
 
         with st.spinner(
-            "🧠 Creating summary..."
+            "Creating your summary..."
         ):
 
             summary = lang_helper.summarize_pdf(
@@ -281,14 +436,26 @@ def show_pdf_section(response_language):
             )
 
         st.session_state.last_result = summary
-        st.session_state.result_type = "summary"
+
+        st.session_state.result_type = (
+            "summary"
+        )
 
     # =====================================================
     # Quiz
     # =====================================================
 
     st.markdown(
-        "### ❓ Generate Quiz"
+        """
+        <div class="tool-label quiz-label">
+            ❓ Generate Quiz
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.caption(
+        "Generate questions to test your understanding."
     )
 
     number_of_questions = st.selectbox(
@@ -301,12 +468,12 @@ def show_pdf_section(response_language):
     )
 
     if st.button(
-        "❓ Generate Questions",
+        "Generate Questions",
         use_container_width=True
     ):
 
         with st.spinner(
-            "🧠 Generating questions..."
+            "Generating questions..."
         ):
 
             quiz = lang_helper.generate_quiz(
@@ -316,7 +483,10 @@ def show_pdf_section(response_language):
             )
 
         st.session_state.last_result = quiz
-        st.session_state.result_type = "quiz"
+
+        st.session_state.result_type = (
+            "quiz"
+        )
 
     # =====================================================
     # Display Result
@@ -332,24 +502,40 @@ def show_pdf_section(response_language):
 
     if result:
 
-        st.markdown("---")
-
         if result_type == "summary":
 
             st.markdown(
-                "## 🧠 PDF Summary"
+                """
+                <div class="result-header">
+                    <span class="result-icon">🧠</span>
+                    <span>PDF Summary</span>
+                </div>
+                """,
+                unsafe_allow_html=True
             )
 
         elif result_type == "quiz":
 
             st.markdown(
-                "## ❓ Generated Quiz"
+                """
+                <div class="result-header">
+                    <span class="result-icon">❓</span>
+                    <span>Generated Quiz</span>
+                </div>
+                """,
+                unsafe_allow_html=True
             )
 
-        st.markdown(result)
+        st.markdown(
+            f"""
+            <div class="result-card">
+                {result}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     return pdf_text
-
 
 # =========================================================
 # Selected Previous Conversation
@@ -362,6 +548,7 @@ def show_selected_review():
     )
 
     if not selected_review:
+
         return
 
     title = selected_review.get(
@@ -371,8 +558,16 @@ def show_selected_review():
 
     st.markdown(
         f"""
-        <div class="conversation-title">
-            💬 {title}
+        <div class="conversation-header">
+            <div class="conversation-icon">💬</div>
+            <div>
+                <div class="conversation-heading">
+                    {title}
+                </div>
+                <div class="conversation-subtitle">
+                    Previous conversation
+                </div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
@@ -396,16 +591,28 @@ def show_selected_review():
 
         if role == "user":
 
-            with st.chat_message("user"):
-                st.markdown(content)
+            with st.chat_message(
+                "user"
+            ):
+
+                st.markdown(
+                    content
+                )
 
         elif role == "assistant":
 
-            with st.chat_message("assistant"):
-                st.markdown(content)
+            with st.chat_message(
+                "assistant"
+            ):
 
-    st.markdown("---")
+                st.markdown(
+                    content
+                )
 
+    st.markdown(
+        '<div class="section-divider"></div>',
+        unsafe_allow_html=True
+    )
 
 # =========================================================
 # Current Chat History
@@ -437,14 +644,23 @@ def show_chat_history():
 
         if role == "user":
 
-            with st.chat_message("user"):
-                st.markdown(content)
+            with st.chat_message(
+                "user"
+            ):
+
+                st.markdown(
+                    content
+                )
 
         elif role == "assistant":
 
-            with st.chat_message("assistant"):
-                st.markdown(content)
+            with st.chat_message(
+                "assistant"
+            ):
 
+                st.markdown(
+                    content
+                )
 
 # =========================================================
 # Chat Input
@@ -453,11 +669,10 @@ def show_chat_history():
 def show_chat_input():
 
     user_input = st.chat_input(
-        "💬 Ask me about your study material..."
+        "Ask anything about your study material..."
     )
 
     return user_input
-
 
 # =========================================================
 # Main Study Interface
