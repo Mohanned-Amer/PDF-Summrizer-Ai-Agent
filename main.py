@@ -1,7 +1,7 @@
 import streamlit as st
-import lang_helper
+import LogicPage
 
-from ui import (
+from UiPage import (
     setup_page,
     show_header,
     show_sidebar,
@@ -67,7 +67,7 @@ if not st.session_state.logged_in:
     if session_token:
 
         user_id = (
-            lang_helper.login_with_session_token(
+            LogicPage.login_with_session_token(
                 session_token
             )
         )
@@ -75,7 +75,7 @@ if not st.session_state.logged_in:
         if user_id:
 
             username = (
-                lang_helper.get_username(
+                LogicPage.get_username(
                     user_id
                 )
             )
@@ -194,7 +194,7 @@ def show_login_page():
 
             border-radius: 10px !important;
 
-            border: 1px solid #d9dee8 !important;
+            border: 4px solid #d9dee8 !important;
 
             background-color: #ffffff !important;
 
@@ -258,7 +258,7 @@ def show_login_page():
 
             gap: 0px;
 
-            border-bottom: 1px solid #e2e6ed;
+            border-bottom: 3px solid #e2e6ed;
 
             margin-bottom: 25px;
 
@@ -381,13 +381,13 @@ def show_login_page():
     )
 
     st.markdown(
-        '<div class="login-main-title">PDF summrizer and analyzer Ai Agent</div>',
+        '<div class="login-main-title">PDF ملخص ومحلل ملفات ال </div>',
         unsafe_allow_html=True
     )
 
     st.markdown(
         '<div class="login-main-subtitle">'
-        'Your intelligent assistant for studying PDF materials'
+        'وكيل ذكاء اصطناعي لتحليل وتلخيص الملفات وتكوين الأساله'
         '</div>',
         unsafe_allow_html=True
     )
@@ -411,16 +411,16 @@ def show_login_page():
 
         st.markdown(
             '<div class="feature-title">'
-            'Study in a smarter way 🧠'
+            '🧠 PDF Summrizer And Analyzer'
             '</div>',
             unsafe_allow_html=True
         )
 
         st.markdown(
             '<div class="feature-description">'
-            'Study AI helps you understand your PDF materials, '
-            'summarize important information and ask questions '
-            'about your study content.'
+            'وكيل تلخيص الملفات يساعدك على'
+            'تلخيص وتحليل المعلومات المهمة'
+            'والتركيز على محتوى معلومات الملف'
             '</div>',
             unsafe_allow_html=True
         )
@@ -429,10 +429,9 @@ def show_login_page():
         st.markdown(
             """
             <div class="feature-box">
-                <strong>📄 PDF Summarization</strong>
+                <strong>📄 تلخيص الملفات </strong>
                 <span>
-                    Convert long study materials into
-                    understandable summaries.
+                    قم بتحويل الملفات الكبيرة إلى ملخص مفهوم وقابل للفهم
                 </span>
             </div>
             """,
@@ -443,10 +442,9 @@ def show_login_page():
         st.markdown(
             """
             <div class="feature-box">
-                <strong>💬 Ask Questions</strong>
+                <strong>💬 استخراج الأسالة </strong>
                 <span>
-                    Ask your AI assistant about the
-                    content of your study materials.
+                   قم باستخراج العديد من الأسالة التي تتعلق بالملفات المرفقة
                 </span>
             </div>
             """,
@@ -457,10 +455,9 @@ def show_login_page():
         st.markdown(
             """
             <div class="feature-box">
-                <strong>🎯 Focus on What Matters</strong>
+                <strong>🎯 المحادثة مع الوكيل</strong>
                 <span>
-                    Find important concepts and make
-                    your study sessions more efficient.
+                  قم بالتحدث إلى الوكيل وطرح الأسأله واحصل على الإجابات
                 </span>
             </div>
             """,
@@ -476,8 +473,8 @@ def show_login_page():
 
         login_tab, signup_tab = st.tabs(
             [
-                "🔐 Login",
-                "📝 Create Account"
+                "🔐 دخول",
+                "📝 انشاء حساب"
             ]
         )
 
@@ -490,7 +487,7 @@ def show_login_page():
 
             st.markdown(
                 '<div class="auth-title">'
-                'Welcome back'
+                'أهلاَ بك'
                 '</div>',
                 unsafe_allow_html=True
             )
@@ -504,22 +501,22 @@ def show_login_page():
 
 
             username = st.text_input(
-                "Username",
+                "اسم المستخدم",
                 key="login_username",
-                placeholder="Enter your username"
+                placeholder="اكتب اسمك"
             )
 
 
             password = st.text_input(
-                "Password",
+                "كلمة المرور",
                 type="password",
                 key="login_password",
-                placeholder="Enter your password"
+                placeholder="ادخل كلمة المرور"
             )
 
 
             if st.button(
-                "Login →",
+                "الدخول →",
                 use_container_width=True,
                 key="login_button"
             ):
@@ -530,13 +527,13 @@ def show_login_page():
                 ):
 
                     st.warning(
-                        "Please Enter username and Password."
+                        "ادخل الاسم وكلمة المرور"
                     )
 
                 else:
 
                     user_id, session_token = (
-                        lang_helper.login_user(
+                        LogicPage.login_user(
                             username,
                             password
                         )
@@ -549,7 +546,7 @@ def show_login_page():
                         st.session_state.user_id = user_id
 
                         st.session_state.username = (
-                            lang_helper.get_username(
+                            LogicPage.get_username(
                                 user_id
                             )
                         )
@@ -563,7 +560,7 @@ def show_login_page():
                     else:
 
                         st.error(
-                            "Invalid Username or Password."
+                            "اسم مستخدم او كلمة مرور غير صحيحة"
                         )
 
 
@@ -575,44 +572,44 @@ def show_login_page():
 
             st.markdown(
                 '<div class="auth-title">'
-                'Create your account'
+                'انشاء حساب'
                 '</div>',
                 unsafe_allow_html=True
             )
 
             st.markdown(
                 '<div class="auth-description">'
-                'Create an account to start using Study AI.'
+                'انشأ حساب للبدء'
                 '</div>',
                 unsafe_allow_html=True
             )
 
 
             new_username = st.text_input(
-                "Username",
+                "اسم المستخدم",
                 key="signup_username",
-                placeholder="Choose a username"
+                placeholder="اكتب اسمك"
             )
 
 
             new_password = st.text_input(
-                "Password",
+                "كلمة المرور",
                 type="password",
                 key="signup_password",
-                placeholder="Create a password"
+                placeholder="اكتب كلمة مرور"
             )
 
 
             confirm_password = st.text_input(
-                "Confirm Password",
+                "تأكيد كلمة المرور",
                 type="password",
                 key="signup_confirm_password",
-                placeholder="Repeat your password"
+                placeholder="تأكيد كلمة المرور"
             )
 
 
             if st.button(
-                "Create Account →",
+                "انشاء حساب  →",
                 use_container_width=True,
                 key="signup_button"
             ):
@@ -624,27 +621,27 @@ def show_login_page():
                 ):
 
                     st.warning(
-                        "Please fill in all fields."
+                        "إملأ جميع الحقول"
                     )
 
                 elif new_password != confirm_password:
 
                     st.error(
-                        "Passwords do not match."
+                        "كلمة المرور غير متطابقة"
                     )
 
-                elif lang_helper.username_exists(
+                elif LogicPage.username_exists(
                     new_username
                 ):
 
                     st.error(
-                        "Username already exists."
+                        "إسم المستخدم بالفعل موجود"
                     )
 
                 else:
 
                     created = (
-                        lang_helper.create_user(
+                        LogicPage.create_user(
                             new_username,
                             new_password
                         )
@@ -653,14 +650,14 @@ def show_login_page():
                     if created:
 
                         st.success(
-                            "Account created successfully! "
-                            "You can now login."
+                            "تم انشاء الحساب بنجاح"
+                            "الان تستطيع الدخول"
                         )
 
                     else:
 
                         st.error(
-                            "Could not create the account."
+                            "لم نستطيع انشاء حساب"
                         )
 
 
@@ -670,7 +667,7 @@ def show_login_page():
 
     st.markdown(
         '<div class="login-footer">'
-        'Study AI • Learn • Understand • Succeed'
+        'تم تطوير الوكيل بواسطة المهندس مهند عبدالله عامر 773482923'
         '</div>',
         unsafe_allow_html=True
     )
@@ -709,7 +706,7 @@ response_language, new_conversation, logout = (
 
 if logout:
 
-    lang_helper.logout_user(
+    LogicPage.logout_user(
         st.session_state.user_id
     )
 
@@ -815,11 +812,11 @@ if user_input:
     with st.chat_message("assistant"):
 
         with st.spinner(
-            "🧠 Study AI is thinking..."
+            "🧠أنا أفكر الاّن ..."
         ):
 
             response = (
-                lang_helper.study_agent(
+                LogicPage.study_agent(
                     user_input,
                     st.session_state.get(
                         "pdf_text"
@@ -850,7 +847,7 @@ if user_input:
     # -----------------------------------------------------
 
     st.session_state.conversation_id = (
-        lang_helper.save_conversation(
+        LogicPage.save_conversation(
             st.session_state.user_id,
             st.session_state.conversation_id,
             st.session_state.chat_history
