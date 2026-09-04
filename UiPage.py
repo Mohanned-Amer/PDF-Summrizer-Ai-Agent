@@ -1,7 +1,7 @@
 import streamlit as st
-import lang_helper
+import LogicPage
 
-from style import load_styles
+from StylePage import load_styles
 
 # =========================================================
 # Page Configuration
@@ -35,10 +35,10 @@ def show_header():
             <div class="header-icon">📄</div>
             <div class="header-content">
                 <div class="header-title">
-                    PDF Summarizer AI
+                   وكيل تلخيص وتحليل الملفات
                 </div>
                 <div class="header-subtitle">
-                    Read • Summarize • Learn
+                    قراءة - تحليل - تلخيص 
                 </div>
             </div>
         </div>
@@ -54,10 +54,10 @@ def show_header():
                 <div class="welcome-icon">👋</div>
                 <div>
                     <div class="welcome-title">
-                        Welcome back, {username}
+                        أهلاً بك {username}
                     </div>
                     <div class="welcome-text">
-                        Upload your PDF and let AI help you understand it.
+                       قم بتحميل الملف واستمتع بافضل الملخصات.
                     </div>
                 </div>
             </div>
@@ -98,10 +98,10 @@ def show_sidebar():
             <div class="sidebar-logo">📄</div>
             <div>
                 <div class="sidebar-brand-title">
-                    PDF Summarizer
+                    محلل الملفات
                 </div>
                 <div class="sidebar-brand-subtitle">
-                    AI Learning Assistant
+                    مساعد ذكاء اصطناعي
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@ def show_sidebar():
     st.sidebar.markdown(
         """
         <div class="sidebar-section-title">
-            🌐 Response Language
+            🌐تحويل اللغة
         </div>
         """,
         unsafe_allow_html=True
@@ -152,9 +152,9 @@ def show_sidebar():
     response_language = st.sidebar.selectbox(
         "Choose language",
         (
-            "Auto Detect",
-            "Arabic",
-            "English"
+            "اللغة الافتراضية",
+            "العربية",
+            "الانجليزية"
         ),
         label_visibility="collapsed"
     )
@@ -169,7 +169,7 @@ def show_sidebar():
     # =====================================================
 
     new_conversation = st.sidebar.button(
-        "＋  New Conversation",
+        "＋  محادثة جديدة",
         use_container_width=True
     )
 
@@ -185,7 +185,7 @@ def show_sidebar():
     st.sidebar.markdown(
         """
         <div class="sidebar-section-title">
-            💬 Recent Conversations
+            💬المحادثات السابقة
         </div>
         """,
         unsafe_allow_html=True
@@ -195,7 +195,7 @@ def show_sidebar():
         "user_id"
     )
 
-    conversations = lang_helper.load_conversations(
+    conversations = LogicPage.load_conversations(
         user_id
     )
 
@@ -206,10 +206,10 @@ def show_sidebar():
             <div class="empty-conversations">
                 <div class="empty-icon">💭</div>
                 <div class="empty-title">
-                    No conversations yet
+                   لا توجد محادثات بعد
                 </div>
                 <div class="empty-text">
-                    Start asking questions about your PDF.
+                    ابدا بطرح الأساله عن محتوى الملف
                 </div>
             </div>
             """,
@@ -260,7 +260,7 @@ def show_sidebar():
     )
 
     logout = st.sidebar.button(
-        "↪  Logout",
+        "↪  تسجيل الخروج",
         use_container_width=True
     )
 
@@ -282,10 +282,10 @@ def show_pdf_section(response_language):
             <div class="section-icon">📄</div>
             <div>
                 <div class="section-title">
-                    Study Material
+                    استمتع بافضل الملخصات
                 </div>
                 <div class="section-description">
-                    Upload a PDF and turn it into useful study content.
+                   قم بتحميل ملفك وحوله إلى معلومات مفيدة
                 </div>
             </div>
         </div>
@@ -294,7 +294,7 @@ def show_pdf_section(response_language):
     )
 
     uploaded_file = st.file_uploader(
-        "Upload your PDF",
+        "تحميل الملف",
         type=["pdf"],
         help="Upload a PDF file containing your study material."
     )
@@ -306,7 +306,7 @@ def show_pdf_section(response_language):
             <div class="upload-hint">
                 <span>📎</span>
                 <span>
-                    Supported format: PDF
+                   pdf يدعم تنسيق 
                 </span>
             </div>
             """,
@@ -328,7 +328,7 @@ def show_pdf_section(response_language):
                     {uploaded_file.name}
                 </div>
                 <div class="file-status">
-                    ✓ PDF ready to process
+                    ✓ الملف جاهز للمعالجة
                 </div>
             </div>
         </div>
@@ -341,15 +341,15 @@ def show_pdf_section(response_language):
     # =====================================================
 
     if st.button(
-        "📖  Read PDF",
+        "📖  قراءة الملف",
         use_container_width=True
     ):
 
         with st.spinner(
-            "Reading your PDF..."
+            "يتم قراءة الملف..."
         ):
 
-            pdf_text = lang_helper.extract_pdf_text(
+            pdf_text = LogicPage.extract_pdf_text(
                 uploaded_file
             )
 
@@ -362,13 +362,13 @@ def show_pdf_section(response_language):
             )
 
             st.success(
-                "PDF text extracted successfully."
+                "تم قراءة النص بنجاح."
             )
 
         else:
 
             st.error(
-                "Could not extract text from this PDF."
+                "فشل في قراءة النص"
             )
 
     # =====================================================
@@ -393,10 +393,10 @@ def show_pdf_section(response_language):
             <div class="action-heading-icon">✨</div>
             <div>
                 <div class="action-title">
-                    What would you like to do?
+                   ماالذي تريد القيام به ؟
                 </div>
                 <div class="action-description">
-                    Choose an AI tool for your study material.
+                    قم باختيار اداة.
                 </div>
             </div>
         </div>
@@ -411,26 +411,26 @@ def show_pdf_section(response_language):
     st.markdown(
         """
         <div class="tool-label">
-            🧠 Summarize
+            🧠 تلخيص
         </div>
         """,
         unsafe_allow_html=True
     )
 
     st.caption(
-        "Create a clear and useful summary from your PDF."
+        "يتم انشاء ملخص مفيد لمحتوى الملف"
     )
 
     if st.button(
-        "Create PDF Summary",
+        "انشاء ملخص للملف",
         use_container_width=True
     ):
 
         with st.spinner(
-            "Creating your summary..."
+            "يتم انشاء الملخص  ..."
         ):
 
-            summary = lang_helper.summarize_pdf(
+            summary = LogicPage.summarize_pdf(
                 pdf_text,
                 response_language
             )
@@ -438,7 +438,7 @@ def show_pdf_section(response_language):
         st.session_state.last_result = summary
 
         st.session_state.result_type = (
-            "summary"
+            "الملخص"
         )
 
     # =====================================================
@@ -448,18 +448,18 @@ def show_pdf_section(response_language):
     st.markdown(
         """
         <div class="tool-label quiz-label">
-            ❓ Generate Quiz
+            ❓ انشاء اسألة
         </div>
         """,
         unsafe_allow_html=True
     )
 
     st.caption(
-        "Generate questions to test your understanding."
+        "يتم انشاء أسألة لاختبار فهمك"
     )
 
     number_of_questions = st.selectbox(
-        "Number of questions",
+        "عدد الأسألة",
         (
             5,
             10,
@@ -468,15 +468,15 @@ def show_pdf_section(response_language):
     )
 
     if st.button(
-        "Generate Questions",
+        "انشاء أسألة",
         use_container_width=True
     ):
 
         with st.spinner(
-            "Generating questions..."
+            "يتم انشاء الأسالة"
         ):
 
-            quiz = lang_helper.generate_quiz(
+            quiz = LogicPage.generate_quiz(
                 pdf_text,
                 number_of_questions,
                 response_language
@@ -485,7 +485,7 @@ def show_pdf_section(response_language):
         st.session_state.last_result = quiz
 
         st.session_state.result_type = (
-            "quiz"
+            "اختبار"
         )
 
     # =====================================================
@@ -502,25 +502,25 @@ def show_pdf_section(response_language):
 
     if result:
 
-        if result_type == "summary":
+        if result_type == "تلخيص":
 
             st.markdown(
                 """
                 <div class="result-header">
                     <span class="result-icon">🧠</span>
-                    <span>PDF Summary</span>
+                    <span>ملخص الملف</span>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
 
-        elif result_type == "quiz":
+        elif result_type == "اختبار":
 
             st.markdown(
                 """
                 <div class="result-header">
                     <span class="result-icon">❓</span>
-                    <span>Generated Quiz</span>
+                    <span>الأسالة المستخرجة</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -553,7 +553,7 @@ def show_selected_review():
 
     title = selected_review.get(
         "title",
-        "Previous Conversation"
+        "المحادثات السابقة"
     )
 
     st.markdown(
@@ -565,7 +565,7 @@ def show_selected_review():
                     {title}
                 </div>
                 <div class="conversation-subtitle">
-                    Previous conversation
+                    المحادثات السابقة
                 </div>
             </div>
         </div>
@@ -669,7 +669,7 @@ def show_chat_history():
 def show_chat_input():
 
     user_input = st.chat_input(
-        "Ask anything about your study material..."
+        "اسأل أي شيء"
     )
 
     return user_input
