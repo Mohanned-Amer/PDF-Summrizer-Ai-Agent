@@ -24,46 +24,41 @@ def setup_page():
 
 def show_header():
 
-    username = st.session_state.get(
-        "username",
-        ""
-    )
-
-    st.markdown(
-        """
+    st.html("""
         <div class="app-header">
             <div class="header-icon">📄</div>
+
             <div class="header-content">
                 <div class="header-title">
-                   وكيل تلخيص وتحليل الملفات
+                    وكيل تلخيص وتحليل الملفات
                 </div>
+
                 <div class="header-subtitle">
-                    قراءة - تحليل - تلخيص 
+                    قراءة - تحليل - تلخيص
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
-    if username:
+    st.html("""
+        <div class="welcome-card">
 
-        st.markdown(
-            f"""
-            <div class="welcome-card">
-                <div class="welcome-icon">👋</div>
-                <div>
-                    <div class="welcome-title">
-                        أهلاً بك {username}
-                    </div>
-                    <div class="welcome-text">
-                       قم بتحميل الملف واستمتع بافضل الملخصات.
-                    </div>
+            <div class="welcome-icon">
+                👋
+            </div>
+
+            <div>
+                <div class="welcome-title">
+                    أهلاً بك
+                </div>
+
+                <div class="welcome-text">
+                    قم بتحميل الملف واستمتع بأفضل الملخصات.
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+
+        </div>
+    """)
 
 # =========================================================
 # Footer
@@ -71,20 +66,21 @@ def show_header():
 
 def show_footer():
 
-    st.markdown(
-        """
+    st.html("""
         <div class="footer">
+
             <div class="footer-line"></div>
+
             <div class="footer-text">
                 PDF Summarizer AI
             </div>
+
             <div class="footer-author">
                 Developed by Eng Mohanned Amer
             </div>
+
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
 # =========================================================
 # Sidebar
@@ -92,62 +88,41 @@ def show_footer():
 
 def show_sidebar():
 
-    st.sidebar.markdown(
-        """
+    # -----------------------------------------------------
+    # Brand
+    # -----------------------------------------------------
+
+    st.sidebar.html("""
         <div class="sidebar-brand">
-            <div class="sidebar-logo">📄</div>
+
+            <div class="sidebar-logo">
+                📄
+            </div>
+
             <div>
+
                 <div class="sidebar-brand-title">
                     محلل الملفات
                 </div>
+
                 <div class="sidebar-brand-subtitle">
                     مساعد ذكاء اصطناعي
                 </div>
+
             </div>
+
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
-    # =====================================================
-    # User Information
-    # =====================================================
+    # -----------------------------------------------------
+    # Language
+    # -----------------------------------------------------
 
-    username = st.session_state.get(
-        "username",
-        ""
-    )
-
-    st.sidebar.markdown(
-        f"""
-        <div class="user-card">
-            <div class="user-avatar">👤</div>
-            <div>
-                <div class="user-label">Signed in as</div>
-                <div class="user-name">{username}</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.sidebar.markdown(
-        '<div class="sidebar-divider"></div>',
-        unsafe_allow_html=True
-    )
-
-    # =====================================================
-    # Response Language
-    # =====================================================
-
-    st.sidebar.markdown(
-        """
+    st.sidebar.html("""
         <div class="sidebar-section-title">
-            🌐تحويل اللغة
+            🌐 تحويل اللغة
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
     response_language = st.sidebar.selectbox(
         "Choose language",
@@ -159,62 +134,64 @@ def show_sidebar():
         label_visibility="collapsed"
     )
 
-    st.sidebar.markdown(
-        '<div class="sidebar-divider"></div>',
-        unsafe_allow_html=True
-    )
+    st.sidebar.html("""
+        <div class="sidebar-divider"></div>
+    """)
 
-    # =====================================================
+    # -----------------------------------------------------
     # New Conversation
-    # =====================================================
+    # -----------------------------------------------------
 
     new_conversation = st.sidebar.button(
         "＋  محادثة جديدة",
         use_container_width=True
     )
 
-    st.sidebar.markdown(
-        '<div class="sidebar-divider"></div>',
-        unsafe_allow_html=True
-    )
+    st.sidebar.html("""
+        <div class="sidebar-divider"></div>
+    """)
 
-    # =====================================================
-    # Past Conversations
-    # =====================================================
+    # -----------------------------------------------------
+    # Previous Conversations
+    # -----------------------------------------------------
 
-    st.sidebar.markdown(
-        """
+    st.sidebar.html("""
         <div class="sidebar-section-title">
-            💬المحادثات السابقة
+            💬 المحادثات السابقة
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    user_id = st.session_state.get(
-        "user_id"
-    )
+    """)
 
     conversations = LogicPage.load_conversations(
-        user_id
+        "local_user"
     )
+
+    # -----------------------------------------------------
+    # No Conversations
+    # -----------------------------------------------------
 
     if not conversations:
 
-        st.sidebar.markdown(
-            """
+        st.sidebar.html("""
             <div class="empty-conversations">
-                <div class="empty-icon">💭</div>
+
+                <div class="empty-icon">
+                    💭
+                </div>
+
                 <div class="empty-title">
-                   لا توجد محادثات بعد
+                    لا توجد محادثات بعد
                 </div>
+
                 <div class="empty-text">
-                    ابدا بطرح الأساله عن محتوى الملف
+                    ابدأ بطرح الأسئلة عن محتوى الملف
                 </div>
+
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+        """)
+
+    # -----------------------------------------------------
+    # Existing Conversations
+    # -----------------------------------------------------
 
     else:
 
@@ -224,7 +201,7 @@ def show_sidebar():
 
             title = conversation.get(
                 "title",
-                "Untitled Conversation"
+                "محادثة بدون عنوان"
             )
 
             if st.sidebar.button(
@@ -250,48 +227,47 @@ def show_sidebar():
 
                 st.rerun()
 
-    # =====================================================
-    # Logout
-    # =====================================================
-
-    st.sidebar.markdown(
-        '<div class="sidebar-bottom-divider"></div>',
-        unsafe_allow_html=True
-    )
-
-    logout = st.sidebar.button(
-        "↪  تسجيل الخروج",
-        use_container_width=True
-    )
-
     return (
         response_language,
         new_conversation,
-        logout
+        False
     )
 
 # =========================================================
-# PDF Upload Section
+# PDF Section
 # =========================================================
 
 def show_pdf_section(response_language):
 
-    st.markdown(
-        """
+    # -----------------------------------------------------
+    # Heading
+    # -----------------------------------------------------
+
+    st.html("""
         <div class="section-heading">
-            <div class="section-icon">📄</div>
-            <div>
-                <div class="section-title">
-                    استمتع بافضل الملخصات
-                </div>
-                <div class="section-description">
-                   قم بتحميل ملفك وحوله إلى معلومات مفيدة
-                </div>
+
+            <div class="section-icon">
+                📄
             </div>
+
+            <div>
+
+                <div class="section-title">
+                    استمتع بأفضل الملخصات
+                </div>
+
+                <div class="section-description">
+                    قم بتحميل ملفك وحوله إلى معلومات مفيدة
+                </div>
+
+            </div>
+
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
+
+    # -----------------------------------------------------
+    # Upload
+    # -----------------------------------------------------
 
     uploaded_file = st.file_uploader(
         "تحميل الملف",
@@ -301,44 +277,51 @@ def show_pdf_section(response_language):
 
     if not uploaded_file:
 
-        st.markdown(
-            """
+        st.html("""
             <div class="upload-hint">
-                <span>📎</span>
+
                 <span>
-                   pdf يدعم تنسيق 
+                    📎
                 </span>
+
+                <span>
+                    يدعم تنسيق PDF
+                </span>
+
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+        """)
 
         return None
 
-    # =====================================================
-    # Uploaded File Card
-    # =====================================================
+    # -----------------------------------------------------
+    # File Card
+    # -----------------------------------------------------
 
-    st.markdown(
-        f"""
+    st.html(f"""
         <div class="file-card">
-            <div class="file-icon">📕</div>
+
+            <div class="file-icon">
+                📕
+            </div>
+
             <div class="file-details">
+
                 <div class="file-name">
                     {uploaded_file.name}
                 </div>
+
                 <div class="file-status">
                     ✓ الملف جاهز للمعالجة
                 </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
-    # =====================================================
-    # Extract PDF Text
-    # =====================================================
+            </div>
+
+        </div>
+    """)
+
+    # -----------------------------------------------------
+    # Read PDF
+    # -----------------------------------------------------
 
     if st.button(
         "📖  قراءة الملف",
@@ -371,9 +354,9 @@ def show_pdf_section(response_language):
                 "فشل في قراءة النص"
             )
 
-    # =====================================================
-    # Use Previously Extracted PDF
-    # =====================================================
+    # -----------------------------------------------------
+    # Get PDF Text
+    # -----------------------------------------------------
 
     pdf_text = st.session_state.get(
         "pdf_text"
@@ -383,51 +366,53 @@ def show_pdf_section(response_language):
 
         return None
 
-    # =====================================================
+    # -----------------------------------------------------
     # Actions
-    # =====================================================
+    # -----------------------------------------------------
 
-    st.markdown(
-        """
+    st.html("""
         <div class="action-heading">
-            <div class="action-heading-icon">✨</div>
-            <div>
-                <div class="action-title">
-                   ماالذي تريد القيام به ؟
-                </div>
-                <div class="action-description">
-                    قم باختيار اداة.
-                </div>
+
+            <div class="action-heading-icon">
+                ✨
             </div>
+
+            <div>
+
+                <div class="action-title">
+                    ما الذي تريد القيام به؟
+                </div>
+
+                <div class="action-description">
+                    قم باختيار أداة.
+                </div>
+
+            </div>
+
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
     # =====================================================
     # Summary
     # =====================================================
 
-    st.markdown(
-        """
+    st.html("""
         <div class="tool-label">
             🧠 تلخيص
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
     st.caption(
-        "يتم انشاء ملخص مفيد لمحتوى الملف"
+        "يتم إنشاء ملخص مفيد لمحتوى الملف"
     )
 
     if st.button(
-        "انشاء ملخص للملف",
+        "إنشاء ملخص للملف",
         use_container_width=True
     ):
 
         with st.spinner(
-            "يتم انشاء الملخص  ..."
+            "يتم إنشاء الملخص..."
         ):
 
             summary = LogicPage.summarize_pdf(
@@ -438,28 +423,25 @@ def show_pdf_section(response_language):
         st.session_state.last_result = summary
 
         st.session_state.result_type = (
-            "الملخص"
+            "تلخيص"
         )
 
     # =====================================================
     # Quiz
     # =====================================================
 
-    st.markdown(
-        """
+    st.html("""
         <div class="tool-label quiz-label">
-            ❓ انشاء اسألة
+            ❓ إنشاء أسئلة
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
     st.caption(
-        "يتم انشاء أسألة لاختبار فهمك"
+        "يتم إنشاء أسئلة لاختبار فهمك"
     )
 
     number_of_questions = st.selectbox(
-        "عدد الأسألة",
+        "عدد الأسئلة",
         (
             5,
             10,
@@ -468,12 +450,12 @@ def show_pdf_section(response_language):
     )
 
     if st.button(
-        "انشاء أسألة",
+        "إنشاء أسئلة",
         use_container_width=True
     ):
 
         with st.spinner(
-            "يتم انشاء الأسالة"
+            "يتم إنشاء الأسئلة..."
         ):
 
             quiz = LogicPage.generate_quiz(
@@ -489,7 +471,7 @@ def show_pdf_section(response_language):
         )
 
     # =====================================================
-    # Display Result
+    # Result
     # =====================================================
 
     result = st.session_state.get(
@@ -504,35 +486,39 @@ def show_pdf_section(response_language):
 
         if result_type == "تلخيص":
 
-            st.markdown(
-                """
+            st.html("""
                 <div class="result-header">
-                    <span class="result-icon">🧠</span>
-                    <span>ملخص الملف</span>
+
+                    <span class="result-icon">
+                        🧠
+                    </span>
+
+                    <span>
+                        ملخص الملف
+                    </span>
+
                 </div>
-                """,
-                unsafe_allow_html=True
-            )
+            """)
 
         elif result_type == "اختبار":
 
-            st.markdown(
-                """
+            st.html("""
                 <div class="result-header">
-                    <span class="result-icon">❓</span>
-                    <span>الأسالة المستخرجة</span>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
 
+                    <span class="result-icon">
+                        ❓
+                    </span>
+
+                    <span>
+                        الأسئلة المستخرجة
+                    </span>
+
+                </div>
+            """)
+
+        # نتيجة الذكاء الاصطناعي
         st.markdown(
-            f"""
-            <div class="result-card">
-                {result}
-            </div>
-            """,
-            unsafe_allow_html=True
+            result
         )
 
     return pdf_text
@@ -556,22 +542,27 @@ def show_selected_review():
         "المحادثات السابقة"
     )
 
-    st.markdown(
-        f"""
+    st.html(f"""
         <div class="conversation-header">
-            <div class="conversation-icon">💬</div>
+
+            <div class="conversation-icon">
+                💬
+            </div>
+
             <div>
+
                 <div class="conversation-heading">
                     {title}
                 </div>
+
                 <div class="conversation-subtitle">
                     المحادثات السابقة
                 </div>
+
             </div>
+
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    """)
 
     messages = selected_review.get(
         "messages",
@@ -591,9 +582,7 @@ def show_selected_review():
 
         if role == "user":
 
-            with st.chat_message(
-                "user"
-            ):
+            with st.chat_message("user"):
 
                 st.markdown(
                     content
@@ -601,18 +590,15 @@ def show_selected_review():
 
         elif role == "assistant":
 
-            with st.chat_message(
-                "assistant"
-            ):
+            with st.chat_message("assistant"):
 
                 st.markdown(
                     content
                 )
 
-    st.markdown(
-        '<div class="section-divider"></div>',
-        unsafe_allow_html=True
-    )
+    st.html("""
+        <div class="section-divider"></div>
+    """)
 
 # =========================================================
 # Current Chat History
@@ -644,9 +630,7 @@ def show_chat_history():
 
         if role == "user":
 
-            with st.chat_message(
-                "user"
-            ):
+            with st.chat_message("user"):
 
                 st.markdown(
                     content
@@ -654,9 +638,7 @@ def show_chat_history():
 
         elif role == "assistant":
 
-            with st.chat_message(
-                "assistant"
-            ):
+            with st.chat_message("assistant"):
 
                 st.markdown(
                     content
@@ -668,17 +650,17 @@ def show_chat_history():
 
 def show_chat_input():
 
-    user_input = st.chat_input(
+    return st.chat_input(
         "اسأل أي شيء"
     )
-
-    return user_input
 
 # =========================================================
 # Main Study Interface
 # =========================================================
 
-def show_study_interface(response_language):
+def show_study_interface(
+    response_language
+):
 
     show_pdf_section(
         response_language
