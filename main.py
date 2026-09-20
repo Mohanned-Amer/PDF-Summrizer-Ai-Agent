@@ -11,7 +11,6 @@ from UiPage import (
     show_study_interface
 )
 
-
 # =========================================================
 # Page Setup
 # =========================================================
@@ -24,13 +23,13 @@ setup_page()
 # =========================================================
 
 if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
+    st.session_state.logged_in = True
 
 if "user_id" not in st.session_state:
-    st.session_state.user_id = None
+    st.session_state.user_id = "local_user"
 
 if "username" not in st.session_state:
-    st.session_state.username = None
+    st.session_state.username = "User"
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -53,643 +52,11 @@ if "last_result" not in st.session_state:
 if "result_type" not in st.session_state:
     st.session_state.result_type = None
 
-
-# =========================================================
-# Restore Login After Refresh
-# =========================================================
-
-if not st.session_state.logged_in:
-
-    session_token = st.query_params.get(
-        "session"
-    )
-
-    if session_token:
-
-        user_id = (
-            LogicPage.login_with_session_token(
-                session_token
-            )
-        )
-
-        if user_id:
-
-            username = (
-                LogicPage.get_username(
-                    user_id
-                )
-            )
-
-            if username:
-
-                st.session_state.logged_in = True
-                st.session_state.user_id = user_id
-                st.session_state.username = username
-
-
-# =========================================================
-# Login / Sign Up Page
-# =========================================================
-
-def show_login_page():
-
-    # =====================================================
-    # Login Page CSS
-    # =====================================================
-
-    st.markdown(
-        """
-        <style>
-
-        /* Login page background */
-
-        .stApp {
-            background-color: #f5f7fb;
-        }
-
-
-        /* Main content width */
-
-        .block-container {
-            max-width: 1050px;
-            padding-top: 45px;
-            padding-bottom: 30px;
-        }
-
-
-        /* Hide sidebar on login */
-
-        [data-testid="stSidebar"] {
-            display: none;
-        }
-
-
-        /* Logo */
-
-        .login-logo-box {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 5px;
-        }
-
-
-        /* Title */
-
-        .login-main-title {
-            text-align: center;
-            font-size: 38px;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-
-
-        /* Subtitle */
-
-        .login-main-subtitle {
-            text-align: center;
-            color: #687386;
-            font-size: 14px;
-            margin-bottom: 35px;
-        }
-
-
-        /* Authentication card */
-
-        .auth-title {
-            font-size: 25px;
-            font-weight: 750;
-            margin-bottom: 3px;
-        }
-
-
-        .auth-description {
-            color: #7b8494;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-
-        /* Feature title */
-
-        .feature-title {
-            font-size: 22px;
-            font-weight: 750;
-            margin-bottom: 8px;
-        }
-
-
-        .feature-description {
-            color: #687386;
-            line-height: 1.7;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-
-        /* Text inputs */
-
-        div[data-testid="stTextInput"] input {
-
-            height: 50px !important;
-
-            border-radius: 10px !important;
-
-            border: 4px solid #d9dee8 !important;
-
-            background-color: #ffffff !important;
-
-            padding-left: 15px !important;
-
-            font-size: 14px !important;
-
-        }
-
-
-        div[data-testid="stTextInput"] input:focus {
-
-            border-color: #6366f1 !important;
-
-            box-shadow:
-                0 0 0 1px #6366f1 !important;
-
-        }
-
-
-        /* Input labels */
-
-        div[data-testid="stTextInput"] label {
-
-            font-size: 13px !important;
-
-            font-weight: 650 !important;
-
-        }
-
-
-        /* Buttons */
-
-        div.stButton > button {
-
-            height: 50px !important;
-
-            border-radius: 10px !important;
-
-            border: none !important;
-
-            font-weight: 700 !important;
-
-            font-size: 14px !important;
-
-            margin-top: 8px;
-
-        }
-
-
-        div.stButton > button:hover {
-
-            transform: translateY(-1px);
-
-        }
-
-
-        /* Tabs */
-
-        div[data-baseweb="tab-list"] {
-
-            gap: 0px;
-
-            border-bottom: 3px solid #e2e6ed;
-
-            margin-bottom: 25px;
-
-        }
-
-
-        button[data-baseweb="tab"] {
-
-            font-weight: 650 !important;
-
-            font-size: 14px !important;
-
-        }
-
-
-        /* Divider */
-
-        .simple-line {
-
-            height: 1px;
-
-            background: #e3e7ee;
-
-            margin: 25px 0;
-
-        }
-
-
-        /* Feature boxes */
-
-        .feature-box {
-
-            padding: 17px;
-
-            background: #ffffff;
-
-            border: 1px solid #e3e7ee;
-
-            border-radius: 12px;
-
-            margin-bottom: 12px;
-
-        }
-
-
-        .feature-box strong {
-
-            font-size: 14px;
-
-        }
-
-
-        .feature-box span {
-
-            display: block;
-
-            color: #737d8e;
-
-            font-size: 12px;
-
-            margin-top: 5px;
-
-            line-height: 1.5;
-
-        }
-
-
-        /* Footer */
-
-        .login-footer {
-
-            text-align: center;
-
-            color: #929aaa;
-
-            font-size: 11px;
-
-            margin-top: 30px;
-
-        }
-
-
-        /* Mobile */
-
-        @media (max-width: 700px) {
-
-            .block-container {
-
-                padding-top: 25px;
-
-            }
-
-            .login-main-title {
-
-                font-size: 31px;
-
-            }
-
-            .feature-title {
-
-                font-size: 20px;
-
-            }
-
-        }
-
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-    # =====================================================
-    # Header
-    # =====================================================
-
-    st.markdown(
-        '<div class="login-logo-box">📚</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        '<div class="login-main-title">PDF ملخص ومحلل ملفات ال </div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        '<div class="login-main-subtitle">'
-        'وكيل ذكاء اصطناعي لتحليل وتلخيص الملفات وتكوين الأساله'
-        '</div>',
-        unsafe_allow_html=True
-    )
-
-
-    # =====================================================
-    # Two Main Columns
-    # =====================================================
-
-    info_column, auth_column = st.columns(
-        [0.9, 1.1],
-        gap="large"
-    )
-
-
-    # =====================================================
-    # Information Column
-    # =====================================================
-
-    with info_column:
-
-        st.markdown(
-            '<div class="feature-title">'
-            '🧠 PDF Summrizer And Analyzer'
-            '</div>',
-            unsafe_allow_html=True
-        )
-
-        st.markdown(
-            '<div class="feature-description">'
-            'وكيل تلخيص الملفات يساعدك على'
-            'تلخيص وتحليل المعلومات المهمة'
-            'والتركيز على محتوى معلومات الملف'
-            '</div>',
-            unsafe_allow_html=True
-        )
-
-
-        st.markdown(
-            """
-            <div class="feature-box">
-                <strong>📄 تلخيص الملفات </strong>
-                <span>
-                    قم بتحويل الملفات الكبيرة إلى ملخص مفهوم وقابل للفهم
-                </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-        st.markdown(
-            """
-            <div class="feature-box">
-                <strong>💬 استخراج الأسالة </strong>
-                <span>
-                   قم باستخراج العديد من الأسالة التي تتعلق بالملفات المرفقة
-                </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-        st.markdown(
-            """
-            <div class="feature-box">
-                <strong>🎯 المحادثة مع الوكيل</strong>
-                <span>
-                  قم بالتحدث إلى الوكيل وطرح الأسأله واحصل على الإجابات
-                </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # =====================================================
-    # Authentication Column
-    # =====================================================
-
-    with auth_column:
-
-        login_tab, signup_tab = st.tabs(
-            [
-                "🔐 دخول",
-                "📝 انشاء حساب"
-            ]
-        )
-
-
-        # =================================================
-        # Login
-        # =================================================
-
-        with login_tab:
-
-            st.markdown(
-                '<div class="auth-title">'
-                'أهلاَ بك'
-                '</div>',
-                unsafe_allow_html=True
-            )
-
-            st.markdown(
-                '<div class="auth-description">'
-                'Enter your account information to continue.'
-                '</div>',
-                unsafe_allow_html=True
-            )
-
-
-            username = st.text_input(
-                "اسم المستخدم",
-                key="login_username",
-                placeholder="اكتب اسمك"
-            )
-
-
-            password = st.text_input(
-                "كلمة المرور",
-                type="password",
-                key="login_password",
-                placeholder="ادخل كلمة المرور"
-            )
-
-
-            if st.button(
-                "الدخول →",
-                use_container_width=True,
-                key="login_button"
-            ):
-
-                if (
-                    not username.strip()
-                    or not password
-                ):
-
-                    st.warning(
-                        "ادخل الاسم وكلمة المرور"
-                    )
-
-                else:
-
-                    user_id, session_token = (
-                        LogicPage.login_user(
-                            username,
-                            password
-                        )
-                    )
-
-                    if user_id:
-
-                        st.session_state.logged_in = True
-
-                        st.session_state.user_id = user_id
-
-                        st.session_state.username = (
-                            LogicPage.get_username(
-                                user_id
-                            )
-                        )
-
-                        st.query_params[
-                            "session"
-                        ] = session_token
-
-                        st.rerun()
-
-                    else:
-
-                        st.error(
-                            "اسم مستخدم او كلمة مرور غير صحيحة"
-                        )
-
-
-        # =================================================
-        # Sign Up
-        # =================================================
-
-        with signup_tab:
-
-            st.markdown(
-                '<div class="auth-title">'
-                'انشاء حساب'
-                '</div>',
-                unsafe_allow_html=True
-            )
-
-            st.markdown(
-                '<div class="auth-description">'
-                'انشأ حساب للبدء'
-                '</div>',
-                unsafe_allow_html=True
-            )
-
-
-            new_username = st.text_input(
-                "اسم المستخدم",
-                key="signup_username",
-                placeholder="اكتب اسمك"
-            )
-
-
-            new_password = st.text_input(
-                "كلمة المرور",
-                type="password",
-                key="signup_password",
-                placeholder="اكتب كلمة مرور"
-            )
-
-
-            confirm_password = st.text_input(
-                "تأكيد كلمة المرور",
-                type="password",
-                key="signup_confirm_password",
-                placeholder="تأكيد كلمة المرور"
-            )
-
-
-            if st.button(
-                "انشاء حساب  →",
-                use_container_width=True,
-                key="signup_button"
-            ):
-
-                if (
-                    not new_username.strip()
-                    or not new_password
-                    or not confirm_password
-                ):
-
-                    st.warning(
-                        "إملأ جميع الحقول"
-                    )
-
-                elif new_password != confirm_password:
-
-                    st.error(
-                        "كلمة المرور غير متطابقة"
-                    )
-
-                elif LogicPage.username_exists(
-                    new_username
-                ):
-
-                    st.error(
-                        "إسم المستخدم بالفعل موجود"
-                    )
-
-                else:
-
-                    created = (
-                        LogicPage.create_user(
-                            new_username,
-                            new_password
-                        )
-                    )
-
-                    if created:
-
-                        st.success(
-                            "تم انشاء الحساب بنجاح"
-                            "الان تستطيع الدخول"
-                        )
-
-                    else:
-
-                        st.error(
-                            "لم نستطيع انشاء حساب"
-                        )
-
-
-    # =====================================================
-    # Footer
-    # =====================================================
-
-    st.markdown(
-        '<div class="login-footer">'
-        'تم تطوير الوكيل بواسطة المهندس مهند عبدالله عامر 773482923'
-        '</div>',
-        unsafe_allow_html=True
-    )
-
-
-# =========================================================
-# Authentication Check
-# =========================================================
-
-if not st.session_state.logged_in:
-
-    show_login_page()
-
-    st.stop()
-
-
 # =========================================================
 # Header
 # =========================================================
 
 show_header()
-
 
 # =========================================================
 # Sidebar
@@ -699,34 +66,11 @@ response_language, new_conversation, logout = (
     show_sidebar()
 )
 
-
 # =========================================================
 # Logout
 # =========================================================
-
-if logout:
-
-    LogicPage.logout_user(
-        st.session_state.user_id
-    )
-
-    st.query_params.clear()
-
-    st.session_state.logged_in = False
-    st.session_state.user_id = None
-    st.session_state.username = None
-
-    st.session_state.chat_history = []
-    st.session_state.conversation_id = None
-    st.session_state.selected_review = None
-
-    st.session_state.pdf_text = None
-    st.session_state.pdf_name = None
-    st.session_state.last_result = None
-    st.session_state.result_type = None
-
-    st.rerun()
-
+# Login has been removed.
+# This button is intentionally ignored.
 
 # =========================================================
 # New Conversation
@@ -745,20 +89,17 @@ if new_conversation:
 
     st.rerun()
 
-
 # =========================================================
 # Previous Conversation
 # =========================================================
 
 show_selected_review()
 
-
 # =========================================================
 # Current Chat History
 # =========================================================
 
 show_chat_history()
-
 
 # =========================================================
 # Study AI Interface
@@ -768,13 +109,11 @@ show_study_interface(
     response_language
 )
 
-
 # =========================================================
 # Chat Input
 # =========================================================
 
 user_input = show_chat_input()
-
 
 # =========================================================
 # Process User Message
@@ -793,7 +132,6 @@ if user_input:
         }
     )
 
-
     # -----------------------------------------------------
     # Display User Message
     # -----------------------------------------------------
@@ -804,7 +142,6 @@ if user_input:
             user_input
         )
 
-
     # -----------------------------------------------------
     # Generate AI Response
     # -----------------------------------------------------
@@ -812,7 +149,7 @@ if user_input:
     with st.chat_message("assistant"):
 
         with st.spinner(
-            "🧠أنا أفكر الاّن ..."
+            "🧠 أنا أفكر الآن ..."
         ):
 
             response = (
@@ -829,7 +166,6 @@ if user_input:
             response
         )
 
-
     # -----------------------------------------------------
     # Add AI Response
     # -----------------------------------------------------
@@ -840,7 +176,6 @@ if user_input:
             "content": response
         }
     )
-
 
     # -----------------------------------------------------
     # Save Conversation
